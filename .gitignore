@@ -1,0 +1,12 @@
+# Datasets
+updated train dataset/
+updated test dataset/
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,51 @@
+--- Cell 2 Outputs ---
+Train: 3200, Test: 1468
+Train - Normal: 903, Abnormal: 2297
+
+--- Cell 4 Outputs ---
+<Figure size 800x500 with 1 Axes>
+[Extracted Image saved as graph_cell_4_0.png]
+--- Cell 6 Outputs ---
+Loading images...
+Train: (3200, 128, 128) with labels, Test: (1468, 128, 128) (no labels)
+
+--- Cell 8 Outputs ---
+<Figure size 1500x600 with 10 Axes>
+[Extracted Image saved as graph_cell_8_1.png]
+--- Cell 10 Outputs ---
+<Figure size 1500x500 with 3 Axes>
+[Extracted Image saved as graph_cell_10_2.png]
+--- Cell 12 Outputs ---
+<Figure size 1000x600 with 1 Axes>
+[Extracted Image saved as graph_cell_12_3.png]
+--- Cell 15 Outputs ---
+Train: (3200, 16384), Test: (1468, 16384)
+
+--- Cell 17 Outputs ---
+  Total predictions: 1468
+  Normal: 460, Abnormal: 1008
+
+--- Cell 19 Outputs ---
+NAIVE BAYES - Training Performance
+Accuracy:  0.6119
+Precision: 0.8620
+Recall:    0.5468
+F1-Score:  0.6692
+
+Confusion Matrix:
+[[ 702  201]
+ [1041 1256]]
+
+--- Cell 20 Outputs ---
+<Figure size 800x600 with 2 Axes>
+[Extracted Image saved as graph_cell_20_4.png]
+--- Cell 23 Outputs ---
+CNN data ready - Train: (3200, 128, 128, 1), Test: (1468, 128, 128, 1)
+
+--- Cell 25 Outputs ---
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+CNN built
+
+--- Cell 27 Outputs ---
+Epoch 1/50
+[1m60/80[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m16s[0m 825ms/step - accuracy: 0.6406 - loss: 2.4076

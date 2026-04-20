@@ -1,0 +1,308 @@
+Automated Classification of Dermoscopic Lesions
+Using EfficientNet-B0 and Gradient-Weighted Class
+Activation Mapping
+Dhairya Desai
+B.Tech Data Science
+MPSTME, NMIMS
+Mumbai, India
+DHAIRY A.DESAI42@nmims.in
+Aarush Dhuri
+B.Tech Data Science
+MPSTME, NMIMS
+Mumbai, India
+AARUSH.DHURI63@nmims.in
+Mihika Patro
+B.Tech Data Science
+MPSTME, NMIMS
+Mumbai, India
+MIHIKA.PATRO34@nmims.in
+Rishika Singh
+B.Tech Data Science
+MPSTME, NMIMS
+Mumbai, India
+RISHIKARAJESH.SINGHCHAUHAN61@nmims.in
+Abstract—Cutaneous oncology continues to be a prominent
+medical challenge affecting millions globally, posing severe mor-
+tality risks if therapeutic intervention is delayed. Visualizing
+sub-dermal anomalies heavily depends on dermoscopy, which
+provides magnified details unattainable by standard inspection.
+Nonetheless, interpreting these dermal patterns requires years
+of specialized training, leaving the diagnostic process vulnerable
+to human subjectivity. Through this research, we construct an
+end-to-end computational pipeline geared towards autonomously
+distinguishing between benign and malignant dermatological
+manifestations. Processing the expansive HAM10000 repository
+[1], we engineered a network tailored around the EfficientNet-B0
+paradigm via pre-trained parameter transfer [3].
+the pronounced distributional skew typical of medical archives,
+where localized benign samples drastically outweigh lethal ones,
+our approach harnessed dynamic tensor transformations, mod-
+ified loss functions applying inverse-frequency penalties, and
+probability-adjusted random sampling. Equally paramount to
+predictive metrics is the aspect of systemic transparency. Grad-
+CAM [4] is incorporated into our system to provide insight
+into how the model arrives at its predictions. By examining
+gradient information associated with the target class, the method
+identifies the regions of the input that play a significant role in
+the final decision. This approach allows us to analyze how the
+model makes its predictions by examining the gradient signals
+associated with the final convolutional layers. Through this
+process, it becomes possible to identify how different regions of
+the input contribute to the overall decision. This process produces
+a heatmap that assigns varying levels of importance to different
+regions of the input image. Such a representation allows for a
+clearer understanding of how specific areas influence the final
+prediction made by the model. By projecting thermal matrices
+corresponding to structural gradients, the system visibly outlines
+the exact morphological coordinates responsible for its final
+deduction. The formulated architecture yields robust diagnostic
+evaluations, maximizing malignant recall to bypass the critical
+danger of false-negative oncology screening.
+Index Terms—Explainable AI, Cutaneous Oncology,
+EfficientNet-B0, Convolutional Architectures, Grad-CAM,
+HAM10000, Transfer Learning
+I. INTRODUCTION
+Rates of cutaneous malignancies exhibit a continuous up-
+ward trajectory worldwide, cementing skin cancer as an es-
+calating public health crisis. Although malignant melanoma
+constitutes a relatively minor subset of total dermatological
+cases, its aggressive metastatic profile is the root cause of
+prevailing skin cancer fatalities. Timely detection is universally
+recognized as the single most effective countermeasure.
+Practicing dermatologists navigate these evaluations via
+dermoscopic devices, leveraging specialized optics and liquid
+filters to pierce the epidermal reflection barrier. Despite this
+technology, human evaluation inherently varies across practi-
+tioners. Integrating automated image processing frameworks
+provides an avenue to bypass these observational bottlenecks.
+This IDSA Mini-Project endeavors to forge a dependable
+software sequence explicitly tasked with categorizing dermo-
+scopic captures into a binary fate:Benign(non-hazardous)
+versusMalignant(cancerous). While baseline categorization
+accuracy serves as a foundational benchmark, this effort
+vigorously highlights the mandate of model transparency.
+Deploying uninterpretable algorithms in a healthcare paradigm
+introduces massive systemic risks. To circumvent this critical
+vulnerability, our implementation incorporates advanced fea-
+ture visualization paradigms to strictly decode the structural
+basis behind every generated probability.
+II. LITERATUREREVIEW
+Computer vision corresponding to dermatological classifi-
+cation has undergone immense structural alterations. Primitive
+strategies depended exclusively upon manually defining geo-
+metric traits. Classic diagnostics revolved around translating
+ABCD geometric guidelines into numeric algorithms. While
+these constrained pipelines functioned under strict laboratory
+environments, they failed to adapt when confronted with
+globally diverse skin phenotypes.
+Recent progress in medical image analysis has been largely
+driven by deep convolutional neural networks (CNNs). Es-
+teva et al. [2] demonstrated that such models can achieve
+performance comparable to dermatologists when trained on
+large datasets. Subsequent research focused on improving
+model depth and performance through architectures such as
+ResNet [5]. However, increasing network depth also led to
+higher computational requirements, making these models more
+resource-intensive.
+Addressing this bloated architectural trend, Tan and Le [3]
+debuted the EfficientNet blueprint. Instead of artificially deep-
+ening a network without restraint, they introduced a frame-
+work that synchronizes width, depth, and resolution scaling
+through a unified “compound coefficient” [3]. EfficientNet-B0
+executes rapid inferences utilizing drastically fewer parameter
+weights, bridging the gap between state-of-the-art capability
+and restrictive clinical hardware limits.
+The difficulty in understanding how deep learning models
+arrive at their predictions has been a widely recognized
+limitation in their practical use. Selvaraju et al. [4] proposed
+Gradient-weighted Class Activation Mapping (Grad-CAM) as
+a method for interpreting convolutional neural networks. The
+technique allows the internal decision process of the model to
+be examined by identifying how different features influence
+the output. Instead of relying solely on output probabilities,
+Grad-CAM makes use of gradient signals from deeper layers
+to determine which regions of an input image play a significant
+role in influencing the final prediction. This allows the model’s
+decision process to be interpreted in a more transparent and
+visually intuitive manner.
+III. METHODOLOGY
+A. Dataset Configuration and Balancing
+This study relies on the HAM10000 dataset [1] for develop-
+ing and assessing the model. The dataset contains dermoscopic
+images sourced from various clinical settings, capturing a wide
+range of skin lesion types and variations. The dataset captures
+a wide variety of pigmented skin lesions, making it suitable for
+developing and testing models aimed at distinguishing between
+different dermatological conditions. It provides high-resolution
+dermoscopic scans covering seven distinct diagnosis clusters:
+•Cancerous Profiles:Melanoma (mel), Basal cell carci-
+noma (bcc), and Actinic keratosis (akiec).
+•Non-Cancerous Profiles:Melanocytic nevi (nv), Benign
+keratosis (bkl), Dermatofibroma (df), and Vascular abnor-
+malities (vasc).
+Fusing these pathologies into a binary framing exposes a
+drastic empirical skew. A staggering majority—around 73%
+(N= 7,314)—operate within the benign bracket, relegating
+malignant cases to a distinct mathematical minority.
+B. Tensor Standardization and Spatial Augmentation
+Neural algorithms require strict multi-dimensional unifor-
+mity. All input photographs underwent rigid spatial transfor-
+Fig. 1. Exploratory Data Analysis charting categorical volume variations and
+inherent demographic profiles within the initial repository.
+mations, resulting in uniform matrices sized at224×224
+dimensions. Pixel values were mathematically centralized ref-
+erencing standard ImageNet normalizations:
+x′
+c = xc −µ c
+σc
+(1)
+To correct the problematic class discrepancy, we deployed
+dual mitigation paradigms:
+1)Inverse Frequency Sampling:Our batch loader au-
+tonomously oversampled malignant photographs mathe-
+matically proportional to their scarcity.
+2)Organic Feature Mutation:Acknowledging that der-
+mal artifacts possess no strict orientation, our pipeline
+actively mutated tensors via axis flips, arbitrary±20 ◦
+orientation pivots, and randomized color saturation to
+enforce invariant topological mapping.
+Fig. 2. Aggregated RGB wavelength distributions correlating non-threatening
+structures alongside malignant pathologies.
+C. Convolutional Backbone: EfficientNet-B0 Transfer Learn-
+ing
+To bypass the extreme computational cost involved in train-
+ing neural synapses from scratch, our project heavily utilizes
+Transfer Learning. We extracted an EfficientNet-B0 graph
+natively accustomed to the expansive ImageNet parameter
+space. The primary topological levels are universally adept
+at recognizing foundational visual properties.
+EfficientNet inherently runs on Mobile Inverted Bottleneck
+Convolution units, utilizing depthwise separable mathematics
+to maintain feature fidelity. As described in scientific lit-
+erature, this layer helps effectively reduce overhead matrix
+multiplications [3]. We installed a new dense progression
+commencing with a protective Dropout tier (p= 0.3) to
+suppress localized parameter memorization, concluding with a
+dual-node projection calculating probabilities for Benign and
+Malignant classifications.
+D. Algorithmic Transparency via Mathematical Grad-CAM
+Understanding which parts of an input image affect the
+model’s output is achieved using Grad-CAM [4]. The tech-
+nique links gradients of the predicted class to the activations
+in the final convolutional layer (Ak), allowing the contribution
+of different spatial regions to be evaluated. This information is
+visualized as a heatmap, where regions with higher intensity
+correspond to a greater impact on the model’s prediction.
+To isolate the class-discriminating zoneL c
+Grad−CAM ∈
+Ru×v, the system captures the gradient derivation of the
+projected target logity c scaled against the tensor activations
+Ak. As established by Selvarajuet al.[4], these numeric
+gradients are globally averaged:
+αc
+k = 1
+Z
+X
+i
+X
+j
+∂y c
+∂Ak
+ij
+(2)
+Subsequently, a cross-weighted summation is filtered
+through a Rectified Linear Unit (ReLU) to isolate positive
+topological values:
+Lc
+Grad−CAM =ReLU
+ X
+k
+αc
+kAk
+!
+(3)
+The resulting matrix is a pure thermal intensity map, geomet-
+rically fused atop the original dermal photography.
+IV. IMPLEMENTATIONINFRASTRUCTURE
+Code deployment utilized the expansive PyTorch frame-
+work. Local algorithmic constraints were outlined as follows:
+•Loss Topography:Optimization calculations were di-
+rected by a Weighted Cross-Entropy loss module to
+explicitly combat clinical imbalances.
+•Momentum Tracking:Gradient decay was regulated
+via Adaptive Moment Estimation. The learning rates
+commenced at a tightly constrainedη= 1×10 −4.
+•Descent Logistics:A CosineAnnealingLR module ag-
+gressively but smoothly decelerated descent adjustments,
+tracking a mathematical cosine curve.
+V. EMPIRICALEVALUATION ANDCLINICALMETRICS
+A. Categorical Assessment
+Standard operational accuracy metrics fail significantly
+when dealing with lethal medical imbalances. In response, this
+clinical topology fundamentally favors sensitivity profiling:
+•Universal Accuracy:86.76%
+•ROC-AUC Integration:0.9375
+•Malignant Network Sensitivity:0.8157
+•Topological Specificity (True Negatives):0.8802
+•Evaluated Precision Factor:0.6224
+Fig. 3. Comprehensive Confusion Matrix indexing test partition throughput
+with associated diagnostic success factors.
+B. Optimization Stability
+Granular structural logging highlights the network’s steady
+operational tuning. Validated learning arcs conclusively docu-
+ment progressive cross-entropy degradation devoid of violent
+geometric spikes.
+Fig. 4. Optimization tracks projecting consistent algorithmic convergence
+corresponding to structural loss gradients.
+Fig. 5. Geometric Receiver Operating Characteristic profiles illustrating
+diagnostic flexibility independent of threshold rigidities.
+C. Visual Diagnostics and Systemic Interpretability
+The pinnacle of utility for this CNN originates directly from
+the XAI Grad-CAM visualizations. When successfully segre-
+gating lethal tumors, the mathematical heatmaps aggressively
+envelop visually erratic borders native to melanoma expansion.
+Paramount to our objectives, the convolutional focal layers
+completely disregard external data toxins—explicitly ignoring
+keratin scales, clinical marker ink, and general epidermal tex-
+ture, validating that the parameter weights genuinely evaluate
+pathology.
+Fig. 6. Grad-CAM transparent diagnostic layers accurately targeting malig-
+nant anomalies while filtering benign topological noise.
+During fractional misclassifications, Grad-CAM operates as
+an unparalleled debugging schematic. Mislabeled benign arti-
+facts (False Positives) produce visual traces mapping directly
+back to exceptionally rare structural pigment anomalies.
+VI. CONCLUDINGANALYSIS ANDFUTURE
+DEVELOPMENTS
+This comprehensive framework effectively engineered, sta-
+bilized, and explicitly decoded a computational infrastructure
+targeting dermatological oncology. Executing Transfer Learn-
+ing through the EfficientNet-B0 bottleneck dramatically accel-
+Fig. 7. Error Analysis via Grad-CAM mapping structural misinterpretations.
+erated geometric derivations across the massive HAM10000
+repository. Proactively deploying mathematical loss weights
+systematically neutralized the dataset’s critical biases.
+Integrating the explicit Grad-CAM calculus was decisive
+in escalating this effort from an incalculable numeric sorting
+tool into an accountable clinical framework. Demonstrating
+internal logic visibly validated that modern topological deep
+learning is structurally capable of establishing human verifi-
+cation. Integrating this module against more racially diverse
+libraries reflecting broader Fitzpatrick pigmentation profiles
+Fig. 8. Topological visual translations bridging initial CNN structural detection into nuanced pathological texture definitions.
+remains the pivotal next milestone.
+REFERENCES
+[1] P. Tschandl, C. Rosendahl, and H. Kittler, “The HAM10000 dataset,
+a large collection of multi-source dermatoscopic images of common
+pigmented skin lesions,”Scientific Data, vol. 5, p. 180161, 2018.
+[2] A. Estevaet al., “Dermatologist-level classification of skin cancer with
+deep neural networks,”Nature, vol. 542, no. 7639, pp. 115–118, 2017.
+[3] M. Tan and Q. Le, “EfficientNet: Rethinking Model Scaling for Convolu-
+tional Neural Networks,” inProc. 36th Int. Conf. Mach. Learn. (ICML),
+2019.
+[4] R. R. Selvarajuet al., “Grad-CAM: Visual Explanations from Deep
+Networks via Gradient-based Localization,” inProc. IEEE Int. Conf.
+Comput. Vis. (ICCV), 2017.
+[5] K. He, X. Zhang, S. Ren, and J. Sun, “Deep Residual Learning for
+Image Recognition,” inProc. IEEE Conf. Comput. Vis. Pattern Recognit.
+(CVPR), 2016.

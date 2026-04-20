@@ -34,21 +34,18 @@ We compare two fundamentally different approaches:
 pcos-detection-cnn-vs-naive-bayes/
 │
 ├── dataset/
-│   ├── train/
-│   └── test/
-│
-├── models/
-│   ├── naive_bayes_model.pkl
-│   └── cnn_model.h5
-│
-├── notebooks/
-│   └── training.ipynb
+│   ├── updated train dataset/
+|       └──images/
+|       └── class_label.csv
+│   └── updated test dataset/
+|       └──images/
+|       └── class label.csv
+|
+├── model.ipynb
 │
 ├── outputs/
 │   └── pcod_predictions.csv
-│
-├── app.py
-├── requirements.txt
+|
 └── README.md
 ```
 

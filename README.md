@@ -1,0 +1,1 @@
+# PCOS-Detection-CNN-vs-Naives-Bayes
